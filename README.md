@@ -1,5 +1,6 @@
 # Perga
 A geometric strategy game.
+![screenshot](screenshot.png)
 
 ![screenshot](screenshot.png)
 
