@@ -1,2 +1,3 @@
-# perga
-Abstract strategy game of connected discs.
+# Perga
+## A geometric strategy game of connected discs.
+
