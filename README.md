@@ -1,6 +1,8 @@
 # Perga
 A geometric strategy game.
 
+![screenshot](screenshot.png)
+
 ## About
 Perga is a concept for an abstract strategy game I thought of while doodling circles. The idea is that players take turns placing different sizes discs on a board. A disc touching more hostile than friendly neighbours is captured and a point is awarded to the capturing player. The strategy lies in using larger discs to block the other player and smaller discs to fit into narrower spaces, and in capturing multiple pieces at once in "cascades".
 
