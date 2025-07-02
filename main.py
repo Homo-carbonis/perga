@@ -2,6 +2,7 @@ import pygame
 from operator import itemgetter
 from random import randint
 
+# Coordinates of screen centre
 offset = pygame.Vector2(0,0)
 
 class Game:
@@ -9,7 +10,7 @@ class Game:
         pygame.init()
         self.running = True
         self.screen = pygame.display.set_mode((640, 480), flags=pygame.RESIZABLE)
-        self.r = 200
+        self.r = 200 # Board size
         self.clock = pygame.time.Clock()
         self.reset_button = Button("reset", (0, self.r + 128))
         self.reset()
@@ -31,7 +32,7 @@ class Game:
                 self.handle(event)
             self.update()
             self.draw()
-            self.clock.tick(60)
+            self.clock.tick(60) # Limit framerate
         pygame.quit()
 
     def handle(self, event):
@@ -50,6 +51,7 @@ class Game:
             if pos in self.reset_button:
                 self.reset()
         elif event.type == pygame.MOUSEBUTTONUP and self.dragged is not None:
+            # Drop disc
             d = self.dragged
             if d.distance_to((0,0)) + d.r < self.r:
                 self.pile.remove(d)
@@ -182,6 +184,14 @@ class Disc:
         self.contacts=[]
         self.score=0
 
+class Board:
+    def __init__(self, r):
+        self.r = r
+        self.discs=[]
+    def append(self, disc):
+        self.discs.append(disc)
+    def __contains__(self, pos):
+        return self.rect.collidepoint(pos)
 
 class Pile:
     def __init__(self,discs, pos, player):
@@ -191,6 +201,10 @@ class Pile:
         self.discs = []
         for r in discs:
             self.append(Disc((0,0), r, player=player))
+    def __getitem__(self, i):
+        return self.discs[i]
+    def __iter__(self):
+        return iter(self.discs)
 
     def append(self, disc):
         self.end.y += disc.r + self.margin
@@ -206,10 +220,7 @@ class Pile:
         for c in self.discs[i:]:
             c.move(disp)
             c.home=c.pos
-    def __getitem__(self, i):
-        return self.discs[i]
-    def __iter__(self):
-        return iter(self.discs)
+
     def draw(self,screen):
         for c in self:
             if not c.dragged:
@@ -227,7 +238,7 @@ class Pile:
 
 
 def kissing_centre(x1,x2,y1,y2, r1,r2, r):
-    "Find the center of a disc of radius r, which is tangent to two other discs"
+    """Find the center of a disc of radius r, which is tangent to two other fixed discs."""
     s1 = r+r1
     s2 = r+r2
     R= x1**2 -x2**2 +y1**2-y2**2 + s2**2 - s1**2
@@ -261,6 +272,12 @@ class Button:
     def draw(self, screen):
         screen.blit(self.text, self.rect.move(offset))
 
+class Circle:
+    def __init__(self, pos, r):
+        self.pos = pygame.Vector2(pos)
+        self.r = r
+    def __contains__(self, pos):
+        return self.pos.distance_to(pos) < self.r
 
 if __name__ == '__main__':
     game = Game()
